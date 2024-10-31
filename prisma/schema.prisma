@@ -1,0 +1,67 @@
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model User {
+  id            String   @id @default(cuid())
+  firstName     String
+  lastName      String
+  email         String   @unique
+  password      String
+  image         String?
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+  role          String
+  isSubscribed  Boolean  @default(false)
+  projectRooms  ProjectRoom[]
+  adminRooms    ProjectRoomAdmin[]
+}
+
+model ProjectRoom {
+  id            String   @id @default(cuid())
+  project       Project  @relation(fields: [id], references: [id], onDelete: Cascade)
+  users         User[]
+  admins        ProjectRoomAdmin[]
+  inviteUrl     String   @unique
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+}
+
+model ProjectRoomAdmin {
+  id            String     @id @default(cuid())
+  user          User       @relation(fields: [userId], references: [id])
+  userId        String
+  projectRoom   ProjectRoom @relation(fields: [projectRoomId], references: [id], onDelete: Cascade)
+  projectRoomId String
+
+  @@unique([userId, projectRoomId])
+}
+
+model Project {
+  id              String      @id @default(cuid())
+  projectRoom     ProjectRoom?
+  name            String
+  description     String
+  feedbacks       Feedback[]
+  createdAt       DateTime    @default(now())
+  updatedAt       DateTime    @updatedAt
+}
+
+model Feedback {
+  id            String   @id @default(cuid())
+  project       Project  @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  projectId     String
+  message       String
+  rating        Int
+  name          String
+  isRead        Boolean  @default(false)
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  @@index([projectId])
+}
