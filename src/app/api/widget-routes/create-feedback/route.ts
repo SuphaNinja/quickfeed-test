@@ -1,16 +1,15 @@
-/* import { NextResponse } from 'next/server';
+import { NextResponse } from 'next/server';
 import { z } from 'zod';
 import { prisma } from '@/lib/prisma';
 
 
 export async function POST(request: Request) {
   try {
-    // Parse and validate the request body
-    const body = await request.json();
+    const data = await request.json();
 
     // Check if the project exists
     const project = await prisma.projectRoom.findUnique({
-      where: { id: body.projectId },
+      where: { id: data.projectId },
     });
 
     if (!project) {
@@ -20,15 +19,16 @@ export async function POST(request: Request) {
     // Create the feedback
     const feedback = await prisma.feedback.create({
       data: {
-
+        projectRoomId: data.projectId,
+        name: data.name,
+        message: data.message,
+        rating: data.rating
       },
     });
-
-
 
     return NextResponse.json(feedback, { status: 201 });
 
   } catch (error) {
     return NextResponse.json({ error: 'An unknown error occurred during your request.' }, { status: 500 });
   }
-} */
+}
