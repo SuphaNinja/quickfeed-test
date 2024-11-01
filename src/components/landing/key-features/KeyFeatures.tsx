@@ -1,7 +1,7 @@
 "use client"
 
 import { Button } from "@/components/ui/button";
-import { ArrowRight, BarChart3, Check, Cpu, LayoutDashboard, LucideIcon, MessageCircle, Zap } from "lucide-react"
+import { ArrowRight, BarChart3, Check, Cpu, LayoutDashboard, LucideIcon, MessageCircle } from "lucide-react"
 import Link from "next/link";
 import { motion } from "framer-motion";
 

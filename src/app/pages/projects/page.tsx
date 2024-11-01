@@ -7,7 +7,7 @@ import Header from '../../../components/projects/Header';
 import ProjectsList from '../../../components/projects/ProjectList';
 
 export default function ProjectsPage() {
-  const { currentUser, isLoading } = useAuth();
+  const { currentUser } = useAuth();
   console.log(currentUser)
   return (
     <div>

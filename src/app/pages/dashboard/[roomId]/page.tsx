@@ -1,4 +1,4 @@
-"use client"
+/* "use client"
 
 import { AlertTriangle, Bell, Calendar, CalendarDays, CheckCircle, CheckCircle2, ChevronDown, Clock, Flag, Home, LayoutDashboard, LogOut, MoreVertical, Search, Settings, TrendingUp, User, Users } from "lucide-react"
 import Link from "next/link"
@@ -584,4 +584,4 @@ export default function Dashboard() {
             </div>
         </div>
     )
-}
+} */

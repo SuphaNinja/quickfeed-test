@@ -93,13 +93,13 @@ export async function POST(request: Request) {
     console.log(analysisResult)
     
     return NextResponse.json(analysisResult)
-  } catch (error: any) {
-    if (error.response) {
-      console.error(error.response.status, error.response.data)
-      return NextResponse.json({ error: error.response.data }, { status: error.response.status })
-    } else {
+  } catch (error) {
+    if (error instanceof Error) {
       console.error(`Error with OpenAI API request: ${error.message}`)
-      return NextResponse.json({ error: 'An error occurred during your request.' }, { status: 500 })
+      return NextResponse.json({ error: error.message }, { status: 500 })
+    } else {
+      console.error(`Unknown error occurred: ${String(error)}`)
+      return NextResponse.json({ error: 'An unknown error occurred during your request.' }, { status: 500 })
     }
   }
 }

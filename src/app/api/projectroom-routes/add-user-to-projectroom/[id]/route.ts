@@ -1,10 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { prisma } from '@/lib/prisma';
-import { z } from 'zod';
 
-const addUserSchema = z.object({
-    userId: z.string(),
-});
+import { z } from 'zod';
 
 export async function POST(
     request: NextRequest,
@@ -14,7 +10,7 @@ export async function POST(
         const projectRoomId = params.id;
         const userId = request.headers.get('x-user-id');
 
-        if (!userId) {
+        if (!userId || projectRoomId) {
             return NextResponse.json({ error: "User not authenticated" }, { status: 401 });
         }
 
@@ -22,8 +18,8 @@ export async function POST(
         
 
 
-        const json = await request.json();
-        const { userId: newUserId } = addUserSchema.parse(json);
+       
+        
 
         // Add the user to the project room
         

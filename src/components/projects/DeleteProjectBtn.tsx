@@ -7,12 +7,7 @@ interface ModalProps {
     id: number;
 }
 
-export default function DeleteProjectBtn  ({ open, setOpen, id }: ModalProps) {
-
-
-    const deleteProject 
-
-
+export default function DeleteProjectBtn  ({ open, setOpen }: ModalProps) {
     const handleDeleteProject = () => {
 
     }

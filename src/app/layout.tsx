@@ -1,10 +1,8 @@
 import QueryProvider from '@/providers/QueryProvider';
 import { ThemeProvider } from '@/providers/ThemeProvider';
-import { Outfit } from "next/font/google";
 import type { Metadata } from "next";
 import './globals.css';
 
-const inter = Outfit({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
   title: "QuickFeed",

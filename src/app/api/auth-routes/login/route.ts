@@ -39,7 +39,7 @@ export async function POST(request: NextRequest) {
       .sign(secret);
 
     // Remove sensitive information from user object
-    const { password, ...userWithoutPassword } = user;
+    const { password: _, ...userWithoutPassword } = user;
 
     return NextResponse.json({ 
       message: "Login successful", 

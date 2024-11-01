@@ -4,8 +4,6 @@
 import React, { Suspense } from "react";
 import Loading from "./loading";
 import NavBar from "@/components/layout/navbar/NavBar";
-import { useQuery } from "@tanstack/react-query";
-import axios from "axios";
 
 export default function Userlayout({ children }: any) {
     

@@ -1,12 +1,10 @@
 "use client"
 
-import { Button } from "@/components/ui/button";
 import { Check, Zap } from "lucide-react"
 import { motion } from "framer-motion";
-import Image, { StaticImageData } from "next/image";
+import { StaticImageData } from "next/image";
 import { SunMoon } from "lucide-react"
 import FeedbackCard from "./FlippableCard";
-import FeedbackImage from "../../../assets/FeedbacksImage.png"
 import transparentWidget from "../../../assets/transparentWidget.png"
 import FakeOverview from "./FakeOverview";
 import { ReactElement } from "react";

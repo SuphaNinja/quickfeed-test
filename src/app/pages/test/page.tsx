@@ -8,7 +8,7 @@ import React from 'react'
 
 interface FeedbacksProps {
     message: string
-    rating: Number
+    rating: number
     name: string
 }
 
