@@ -17,7 +17,7 @@ export async function POST(request: Request) {
     }
 
     // Create the feedback
-    const feedback = await prisma.feedback.updateMany({
+    const feedback = await prisma.feedback.create({
       data: {
         projectRoomId: data.projectId,
         name: data.name,
