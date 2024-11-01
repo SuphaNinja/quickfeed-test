@@ -1,11 +1,15 @@
 "use client"
 
 
-import React, { Suspense } from "react";
+import React, { ReactNode, Suspense } from "react";
 import Loading from "./loading";
 import NavBar from "@/components/layout/navbar/NavBar";
 
-export default function Userlayout({ children }: any) {
+interface ContainerProps {
+    children: ReactNode
+}
+
+export default function Userlayout({ children }: ContainerProps) {
     
     return (
         <div className="px-5  ">
