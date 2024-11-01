@@ -27,6 +27,7 @@ model ProjectRoom {
   description     String
   url             String
   inviteUrl       String?
+  visitor         Int @default(0)
   createdAt       DateTime @default(now())
   updatedAt       DateTime @updatedAt
 
@@ -77,10 +78,8 @@ model Feedback {
   projectRoomId   String
   message         String
   rating          Int
-  name            String
-  isRead          Boolean  @default(false)
+  name            String?
   createdAt       DateTime @default(now())
-  updatedAt       DateTime @updatedAt
 
   @@index([projectRoomId])
 }
@@ -90,12 +89,77 @@ model Analysis {
   title             String
   description       String
   overallRating     Float
-  diagramData       String
   createdBy         String
   projectRoom       ProjectRoom @relation(fields: [projectRoomId], references: [id], onDelete: Cascade)
   projectRoomId     String
   createdAt         DateTime @default(now())
   updatedAt         DateTime @updatedAt
 
+  ratingDistribution RatingDistribution?
+  sentimentBreakdown SentimentBreakdown?
+  topIssues          TopIssue[]
+  ratingTrends       RatingTrend[]
+  keywordAnalyses    KeywordAnalysis[]
+
   @@index([projectRoomId])
+}
+
+model RatingDistribution {
+  id                   String   @id @default(cuid())
+  analysis             Analysis @relation(fields: [analysisId], references: [id], onDelete: Cascade)
+  analysisId           String   @unique
+  fiveStarCount        Int
+  fiveStarPercentage   Float
+  fiveStarKeywords     String[]
+  fourStarCount        Int
+  fourStarPercentage   Float
+  fourStarKeywords     String[]
+  threeStarCount       Int
+  threeStarPercentage  Float
+  threeStarKeywords    String[]
+  twoStarCount         Int
+  twoStarPercentage    Float
+  twoStarKeywords      String[]
+  oneStarCount         Int
+  oneStarPercentage    Float
+  oneStarKeywords      String[]
+}
+
+model SentimentBreakdown {
+  id                   String   @id @default(cuid())
+  analysis             Analysis @relation(fields: [analysisId], references: [id], onDelete: Cascade)
+  analysisId           String   @unique
+  positiveCount        Int
+  positivePercentage   Float
+  neutralCount         Int
+  neutralPercentage    Float
+  negativeCount        Int
+  negativePercentage   Float
+}
+
+model TopIssue {
+  id            String   @id @default(cuid())
+  analysis      Analysis @relation(fields: [analysisId], references: [id], onDelete: Cascade)
+  analysisId    String
+  issue         String
+  frequency     Int
+  averageRating Float
+}
+
+model RatingTrend {
+  id            String   @id @default(cuid())
+  analysis      Analysis @relation(fields: [analysisId], references: [id], onDelete: Cascade)
+  analysisId    String
+  date          DateTime
+  averageRating Float
+}
+
+model KeywordAnalysis {
+  id                String   @id @default(cuid())
+  analysis          Analysis @relation(fields: [analysisId], references: [id], onDelete: Cascade)
+  analysisId        String
+  keyword           String
+  frequency         Int
+  sentiment         String
+  associatedRatings Int[]
 }
