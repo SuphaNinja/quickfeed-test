@@ -34,12 +34,12 @@ export async function middleware(request: NextRequest) {
 }
 
 export const config = {
- matcher: [
-    '/api/user/me',
-    '/api/protected/:path*',
-    '/api/create-project',
-    '/api/get-projectroom-by-id/:path*',
-    '/api/add-user-to-projectroom/:path*',
+  matcher: [
+    '/api/user-routes/get-current-user',
+    '/api/project-routes/delete-project',
+    '/api/project-routes/create-project',
+    '/api/projectroom-routes/get-projectroom-by-id/:path*',
+    '/api/openai-routes/create-new-analysis',
     '/api/remove-user-from-projectroom/:path*'
   ],
 }

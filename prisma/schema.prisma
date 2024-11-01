@@ -1,67 +1,101 @@
 datasource db {
-  provider = "sqlite"
-  url      = env("DATABASE_URL")
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
 }
 
 generator client {
   provider = "prisma-client-js"
 }
-
 model User {
-  id            String   @id @default(cuid())
-  firstName     String
-  lastName      String
-  email         String   @unique
-  password      String
-  image         String?
-  createdAt     DateTime @default(now())
-  updatedAt     DateTime @updatedAt
-  role          String
-  isSubscribed  Boolean  @default(false)
-  projectRooms  ProjectRoom[]
-  adminRooms    ProjectRoomAdmin[]
+  id                String   @id @default(cuid())
+  firstName         String
+  lastName          String
+  email             String   @unique
+  password          String
+  image             String?
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+  role              String
+  isSubscribed      Boolean  @default(false)
+  projectRoomsUser  ProjectRoomUser[]
 }
 
 model ProjectRoom {
-  id            String   @id @default(cuid())
-  project       Project  @relation(fields: [id], references: [id], onDelete: Cascade)
-  users         User[]
-  admins        ProjectRoomAdmin[]
-  inviteUrl     String   @unique
-  createdAt     DateTime @default(now())
-  updatedAt     DateTime @updatedAt
+  id              String   @id @default(cuid())
+  title           String
+  description     String
+  url             String
+  inviteUrl       String?
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  users           ProjectRoomUser[]
+  analyses        Analysis[]
+  tasks           Task[]
+  feedbacks       Feedback[]
 }
 
-model ProjectRoomAdmin {
-  id            String     @id @default(cuid())
-  user          User       @relation(fields: [userId], references: [id])
-  userId        String
-  projectRoom   ProjectRoom @relation(fields: [projectRoomId], references: [id], onDelete: Cascade)
-  projectRoomId String
+model ProjectRoomUser {
+  id              String     @id @default(cuid())
+  user            User       @relation(fields: [userId], references: [id])
+  userId          String
+  firstName       String
+  lastName        String
+  email           String
+  image           String?
+  projectRoom     ProjectRoom @relation(fields: [projectRoomId], references: [id], onDelete: Cascade)
+  projectRoomId   String
+  role            String     // e.g., "admin", "member", "viewer"
+  assignedTasks   Task[]     @relation("AssignedTasks")
+  createdTasks    Task[]     @relation("CreatedTasks")
 
+  createdAt       DateTime   @default(now())
   @@unique([userId, projectRoomId])
 }
 
-model Project {
-  id              String      @id @default(cuid())
-  projectRoom     ProjectRoom?
-  name            String
-  description     String
-  feedbacks       Feedback[]
-  createdAt       DateTime    @default(now())
-  updatedAt       DateTime    @updatedAt
+model Task {
+  id              String         @id @default(cuid())
+  title           String?
+  description     String?
+  createdAt       DateTime       @default(now())
+  updatedAt       DateTime       @updatedAt
+  deadline        DateTime?
+  status          String          @default("Pending")
+  priority        String       
+  assignee        ProjectRoomUser @relation("AssignedTasks", fields: [assigneeId], references: [id])
+  assigneeId      String
+  assignor        ProjectRoomUser @relation("CreatedTasks", fields: [assignorId], references: [id])
+  assignorId      String
+  projectRoom     ProjectRoom    @relation(fields: [projectRoomId], references: [id])
+  projectRoomId   String
 }
 
 model Feedback {
-  id            String   @id @default(cuid())
-  project       Project  @relation(fields: [projectId], references: [id], onDelete: Cascade)
-  projectId     String
-  message       String
-  rating        Int
-  name          String
-  isRead        Boolean  @default(false)
-  createdAt     DateTime @default(now())
-  updatedAt     DateTime @updatedAt
+  id              String   @id @default(cuid())
+  projectRoom     ProjectRoom  @relation(fields: [projectRoomId], references: [id], onDelete: Cascade)
+  projectRoomId   String
+  message         String
+  rating          Int
+  name            String
+  isRead          Boolean  @default(false)
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
 
-  @@index([projectId])
+  @@index([projectRoomId])
+}
+
+model Analysis {
+  id                String   @id @default(cuid())
+  title             String
+  description       String
+  overallRating     Float
+  diagramData       String
+  createdBy         String
+  projectRoom       ProjectRoom @relation(fields: [projectRoomId], references: [id], onDelete: Cascade)
+  projectRoomId     String
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+
+  @@index([projectRoomId])
 }
